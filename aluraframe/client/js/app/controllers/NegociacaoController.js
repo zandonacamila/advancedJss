@@ -6,7 +6,10 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
-        this._listaNegociacoes = new ListaNegociacoes();
+
+        this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
+        // com arrow function, o this se mantém o mesmo onde quer que a função seja chamda, ou seja, é léxico
+        // é pego o this no momento da criação da função e ele se mantém até o final
         
         this._negociacoesView = new NegociacoesView($('#negociacoesView'));
         this._negociacoesView.update(this._listaNegociacoes);
@@ -42,8 +45,8 @@ class NegociacaoController {
         this._listaNegociacoes.esvazia();
         this._negociacoesView.update(this._listaNegociacoes);
 
-        this._mensagem.texto('Negociações apagadas com sucesso!');
-        this.mensagemView.update(this._mensagem);
+        this._mensagem.texto = 'Negociações apagadas com sucesso!'; //sem o underline a mensagem não é exibida
+        this._mensagemView.update(this._mensagem);
     }
     
     _limpaFormulario() {

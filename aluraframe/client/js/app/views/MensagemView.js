@@ -6,13 +6,13 @@ class MensagemView extends View {
     
    template(model) {
 
-    return model.texto ? `<p class="alert alert-info">${model.texto}</p>` : '<p></p>'; 
+      return model.texto ? `<p class="alert alert-info">${model.texto}</p>` : '<p></p>'; 
        // operador ternário ('..?..:..'), ou 'if ternário'. Verifica se o 'model.texto' é verdadeiro, ou seja, 
        //retorna algo diferente de undefined ou null ou vazio. Se for verdadeiro, retorna 'model.texto', senão, 
        //retorna parágrafo vazio ('<p></p>')
     
-    /*setTimeout(function() { 
-        document.querySelector('#mensagemView') = `<p></p>`
-    },3000)*/       
+      /*setTimeout(function() { 
+        document.querySelector('#mensagemView') = '<p></p>'
+    },3000);*/       
    }
 }
