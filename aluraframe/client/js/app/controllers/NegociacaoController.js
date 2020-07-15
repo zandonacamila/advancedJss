@@ -2,13 +2,33 @@ class NegociacaoController {
     
     constructor() {
         
-        let $ = document.querySelector.bind(document);
+        let $ = document.querySelector.bind(document); // .bind para fixar o document e não mudar conforme a variável
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
 
-        this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
-        // com arrow function, o this se mantém o mesmo onde quer que a função seja chamda, ou seja, é léxico
+       let self = this;
+
+        this._listaNegociacoes = new Proxy(new ListaNegociacoes(), { // proxy = usado para não manipular o model
+            
+            get(target, prop, receiver) {
+
+                if(['adiciona', 'esvazia'].includes(prop) && typeof(target[prop]) == typeof(Function)) {
+
+                    return function() {
+
+                        console.log(`interceptando ${prop}`);
+                        Reflect.apply(target[prop], target, arguments) // arguments acessível em qualquer função e dá acesso a todos os parâmetros da função
+                        self._negociacoesView.update(target);
+                    }
+                }
+
+                return Reflect.get(target, prop, receiver)
+            } 
+        });
+        
+        // this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
+        // com arrow function, o this se mantém o mesmo onde quer que a função seja chamada, ou seja, é léxico
         // é pego o this no momento da criação da função e ele se mantém até o final
         
         this._negociacoesView = new NegociacoesView($('#negociacoesView'));

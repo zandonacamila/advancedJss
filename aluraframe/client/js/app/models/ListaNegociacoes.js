@@ -1,17 +1,17 @@
 class ListaNegociacoes {
     
-    constructor(contexto, armadilha) {
+    constructor(/*contexto, armadilha*/) { //apagar
         
         this._negociacoes = [];
-        this._armadilha = armadilha;
-        this._contexto = contexto;
+       /* this._armadilha = armadilha; // apagar      
+        this._contexto = contexto;  //apagar */
 
     }
     
     adiciona(negociacao) {
         
         this._negociacoes.push(negociacao);
-        this._armadilha(this);
+       // this._armadilha(this); // infraestrutura apagar 
 
         // Reflect.apply(this._armadilha, this._contexto, [this]); não é necessário após aplicar a arrow function pois seu escopo é léxico  
         // this precisa ser passado dentro de array
@@ -25,7 +25,7 @@ class ListaNegociacoes {
 
     esvazia() {
         this._negociacoes = [];
-        this._armadilha(this);
+        //this._armadilha(this); // infraestrutura apagar
        // Reflect.apply(this._armadilha, this._contexto, [this]);  não é necessário após aplicar a arrow function pois seu escopo é léxico
 
     }
