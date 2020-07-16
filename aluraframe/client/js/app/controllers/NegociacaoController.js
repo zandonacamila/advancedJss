@@ -6,12 +6,11 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
-
-        this._listaNegociacoes = ProxyFactory.create(
-            new ListaNegociacoes(), 
-            ['adiciona', 'esvazia'],
-            (model) => this._negociacoesView.update(model)
-            ); 
+        
+        this._listaNegociacoes = new Bind(new ListaNegociacoes(),
+        new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia'); 
+        // ['adiciona', 'esvazia'] fora dos colchetes por causa do REST operator na classe Bind.
+        
        
             /*this._listaNegociacoes = new Proxy(new ListaNegociacoes(), { // proxy = usado para não manipular o model
             
@@ -31,21 +30,13 @@ class NegociacaoController {
             } 
             });*/
         
-            // this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
-            // com arrow function, o this se mantém o mesmo onde quer que a função seja chamada, ou seja, é léxico
-            // é pego o this no momento da criação da função e ele se mantém até o final
-        
+            /* this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
+             com arrow function, o this se mantém o mesmo onde quer que a função seja chamada, ou seja, é léxico
+             é pego o this no momento da criação da função e ele se mantém até o final */
+                    
+             this._mensagem = new Bind(new Mensagem(),
+             new MensagemView($('#mensagemView')), 'texto'); // ['texto'] - REST
 
-            this._negociacoesView = new NegociacoesView($('#negociacoesView'));
-            this._negociacoesView.update(this._listaNegociacoes);
-            
-            this._mensagem = ProxyFactory.create(
-                new Mensagem(), ['texto'], model => 
-                    this._mensagemView.update(model));
-            this._mensagemView = new MensagemView($('#mensagemView'));
-            this._mensagemView.update(this._mensagemView);
-            
-           
     }
     
     adiciona(event) {
