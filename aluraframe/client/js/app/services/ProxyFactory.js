@@ -22,6 +22,7 @@ class ProxyFactory {
             set(target, prop, value, receiver) {
 
                 if(props.includes(prop)) {
+                    
                     acao(target); //  Dessa forma funciona. Correção do instrutor: "target(prop) = value" porém apresenta erro no console.
                 };
                 return Reflect.set(target, prop, value, receiver);
@@ -34,3 +35,5 @@ class ProxyFactory {
         return typeof(func) == typeof(Function);
     }
 }
+/* O padrão de projeto Factory ocorre quando temos uma classe que nos ajuda a criar um objeto complexo, ou seja,
+ ela esconde de nós os detalhes de criação desse objeto */
