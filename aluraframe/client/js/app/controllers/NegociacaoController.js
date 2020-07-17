@@ -55,7 +55,44 @@ class NegociacaoController {
      
         let service = new NegociacaoService();
 
-        service.obterNegociacoesDaSemana((erro, negociacoes) => {// convenção error first: se tiver erro, pego ele no 1° parâmetro 
+        Promise.all([  // resolve todas as promises de uma vez só, na sequência
+         service.obterNegociacoesDaSemana(),
+         service.obterNegociacoesDaSemanaAnterior(),
+         service.obterNegociacoesDaSemanaRetrasada()]
+        ).then(negociacoes => {
+        negociacoes
+            .reduce((arrayAchatado, array) => arrayAchatado.concat(array), [])
+            .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+            this._mensagem.texto = 'Negociações importadas com sucesso :D';
+        })
+        .catch(error => this._mensagem.texto = error);
+
+    // ********Requisições feitas com PROMISE - problema de sincronicidade persiste:********
+
+       /* service.obterNegociacoesDaSemana()
+            .then(negociacoes => {
+            negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
+            this._mensagem.texto = 'Negociações da semana obtidas com sucesso.'
+        })
+            .catch(error => this._mensagem.texto = error)
+
+        service.obterNegociacoesDaSemanaAnterior()
+            .then(negociacoes => {
+            negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
+            this._mensagem.texto = 'Negociações da semana obtidas com sucesso.'
+        })
+            .catch(error => this._mensagem.texto = error)
+
+        service.obterNegociacoesDaSemanaRetrasada()
+            .then(negociacoes => {
+            negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao))
+            this._mensagem.texto = 'Negociações da semana obtidas com sucesso.'
+        })
+            .catch(error => this._mensagem.texto = error)*/
+
+        // ********Pyramid of DOOM: requisições assíncronas aninhadas:********
+
+        /*service.obterNegociacoesDaSemana((erro, negociacoes) => {// convenção error first: se tiver erro, pego ele no 1° parâmetro 
 
             if(erro) { 
                 this._mensagem.texto = erro;
@@ -63,8 +100,30 @@ class NegociacaoController {
             }
 
             negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
-            this._mensagem.texto = 'Negociações importadas com sucesso!!';
-        });
+            // this._mensagem.texto = 'Negociações importadas com sucesso!!';
+        
+            service.obterNegociacoesDaSemanaAnterior((erro, negociacoes) => {// convenção error first: se tiver erro, pego ele no 1° parâmetro 
+
+                if(erro) { 
+                    this._mensagem.texto = erro;
+                    return;
+                }
+    
+                negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+                // this._mensagem.texto = 'Negociações importadas com sucesso!!';
+
+                service.obterNegociacoesDaSemanaRetrasada((erro, negociacoes) => {// convenção error first: se tiver erro, pego ele no 1° parâmetro 
+
+                    if(erro) { 
+                        this._mensagem.texto = erro;
+                        return;
+                    }
+        
+                    negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+                    this._mensagem.texto = 'Negociações importadas com sucesso!!';
+                });
+            });
+        });*/
     }
     
     _criaNegociacao() {
