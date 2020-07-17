@@ -53,37 +53,18 @@ class NegociacaoController {
 
     importaNegociacoes() {
      
-        let xhr = new XMLHttpRequest();
+        let service = new NegociacaoService();
 
-        xhr.open('GET', 'negociacoes/semana') // 'negociacoes/semana' = seria a url da api????
+        service.obterNegociacoesDaSemana((erro, negociacoes) => {// convenção error first: se tiver erro, pego ele no 1° parâmetro 
 
-        xhr.onreadystatechange = () => {
-            /* status de requisição:
-            0: requisição não iniciada
-
-            1: conexão com o servidor estabelecida
-
-            2: requisição recebida
-            
-            3: processando requisição
-            
-            4:requisição concluída e resposta pronta */
-            if(xhr.readyState == 4) {
-
-                if(xhr.status == 200) {
-                // JSON não é um objeto js e precisa do .parse para ser manipulado
-                    JSON.parse(xhr.responseText) // é um texto, JSON.parse vai retornar em objeto
-                    .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)) // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array
-                    .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao)); // esse array é percorrido e adicionado na minha lista de negociacoes 
-                    this._mensagem.texto = 'Negociações importadas com sucesso.';
-                } else {
-                    
-                    console.log(xhr.responseText);
-                    this._mensagem.texto = 'Não foi possível obter resposta do servidor.';
-                }
+            if(erro) { 
+                this._mensagem.texto = erro;
+                return;
             }
-        };
-        xhr.send();
+
+            negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+            this._mensagem.texto = 'Negociações importadas com sucesso!!';
+        });
     }
     
     _criaNegociacao() {

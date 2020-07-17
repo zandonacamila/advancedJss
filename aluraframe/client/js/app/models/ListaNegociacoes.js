@@ -29,4 +29,9 @@ class ListaNegociacoes {
        // Reflect.apply(this._armadilha, this._contexto, [this]);  não é necessário após aplicar a arrow function pois seu escopo é léxico
 
     }
+
+    get volumeTotal() {
+
+        return this._negociacoes.reduce((total, n) => total + n.volume, 0.0);
+    }
 }

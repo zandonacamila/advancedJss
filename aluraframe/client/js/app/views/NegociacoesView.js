@@ -34,7 +34,7 @@ class NegociacoesView extends View { // extends = herança
                 <td>Total</td>
                 <td colspan="2"></td>
                 <td>
-                    ${model.negociacoes.reduce((total, n) => total + n.volume, 0.0)} 
+                    ${model.volumeTotal} 
                 </td>
             </tfoot>
             
