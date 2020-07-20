@@ -1,36 +1,23 @@
 class NegociacaoService {
 
+    constructor() {
+
+        this._http = new HttpService();
+    }
+
     obterNegociacoesDaSemana() {
 
         return new Promise((resolve, reject) => {
-        
-            let xhr = new XMLHttpRequest();
 
-            xhr.open('GET', 'negociacoes/semana') // 'negociacoes/semana' = seria a url da api????
-
-            xhr.onreadystatechange = () => {
-        
-                if(xhr.readyState == 4) {
-
-                    if(xhr.status == 200) {
-
-                    // JSON não é um objeto JS e precisa do .parse para ser manipulado
-                        resolve(JSON.parse(xhr.responseText) // é um texto, JSON.parse vai retornar em objeto
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array
-                        
-                        //.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao)); // esse array é percorrido e adicionado na minha lista de negociacoes 
-                        // this._mensagem.texto = 'Negociações importadas com sucesso.';
-                    } else {
-                        
-                        console.log(xhr.responseText);
-                        reject('Não foi possível obter as negociações :(', null);
-                        //this._mensagem.texto = 'Não foi possível obter resposta do servidor.';
-                    }
-                }
-            };
-
-        xhr.send();
-
+            this._http
+            .get('negociacoes/semana')
+            .then(negociacoes => {
+                resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array           
+            })
+            .catch(erro => {
+                console.log(erro);
+                reject('Não foi possível obter as negociações da semana.')
+            });            
         });
     }
 
@@ -38,33 +25,15 @@ class NegociacaoService {
 
         return new Promise((resolve, reject) => {
 
-            let xhr = new XMLHttpRequest();
-
-            xhr.open('GET', 'negociacoes/anterior') // 'negociacoes/semana' = seria a url da api????
-
-            xhr.onreadystatechange = () => {
-        
-                if(xhr.readyState == 4) {
-
-                    if(xhr.status == 200) {
-
-                    // JSON não é um objeto JS e precisa do .parse para ser manipulado
-                        resolve(JSON.parse(xhr.responseText) // é um texto, JSON.parse vai retornar em objeto
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array
-                        
-                        //.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao)); // esse array é percorrido e adicionado na minha lista de negociacoes 
-                        // this._mensagem.texto = 'Negociações importadas com sucesso.';
-                    } else {
-                        
-                        console.log(xhr.responseText);
-                        reject('Não foi possível obter as negociações :(', null);
-                        //this._mensagem.texto = 'Não foi possível obter resposta do servidor.';
-                    }
-                }
-            };
-
-            xhr.send();
-
+            this._http
+            .get('negociacoes/anterior')
+            .then(negociacoes => {
+                resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array           
+            })
+            .catch(erro => {
+                console.log(erro);
+                reject('Não foi possível obter as negociações da semana anterior.')
+            });            
         });
     }
 
@@ -72,34 +41,17 @@ class NegociacaoService {
 
         return new Promise((resolve, reject) => {
 
-            let xhr = new XMLHttpRequest();
-
-            xhr.open('GET', 'negociacoes/retrasada') // 'negociacoes/semana' = seria a url da api????
-
-            xhr.onreadystatechange = () => {
-        
-                if(xhr.readyState == 4) {
-
-                    if(xhr.status == 200) {
-
-                    // JSON não é um objeto JS e precisa do .parse para ser manipulado
-                        resolve(JSON.parse(xhr.responseText) // é um texto, JSON.parse vai retornar em objeto
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array
-                        
-                        //.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao)); // esse array é percorrido e adicionado na minha lista de negociacoes 
-                        // this._mensagem.texto = 'Negociações importadas com sucesso.';
-                    } else {
-                        
-                        console.log(xhr.responseText);
-                        reject('Não foi possível obter as negociações :(', null);
-                        //this._mensagem.texto = 'Não foi possível obter resposta do servidor.';
-                    }
-                }
-            };
-            xhr.send();
+            this._http
+            .get('negociacoes/retrasada')
+            .then(negociacoes => {
+                resolve(negociacoes.map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor))); // cada objeto é convertido em uma instância de negociação, no final é gerado umm novo array           
+            })
+            .catch(erro => {
+                console.log(erro);
+                reject('Não foi possível obter as negociações da semana retrasada.')
+            });            
         });
     }
-
 }
          /* status de requisição:
             0: requisição não iniciada

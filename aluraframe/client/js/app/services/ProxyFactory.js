@@ -22,8 +22,9 @@ class ProxyFactory {
             set(target, prop, value, receiver) {
 
                 if(props.includes(prop)) {
+                    target[prop] = value;                    
                     // let retorno = Reflect.apply(target[prop], target, arguments);
-                    acao(target); //  Dessa forma funciona. Correção do instrutor: "target(prop) = value" porém apresenta erro no console.
+                    acao(target); //  Dessa forma funciona. Correção do instrutor: "target[prop] = value" porém apresenta erro no console.
                     // return retorno;
                 };
                 return Reflect.set(target, prop, value, receiver);
