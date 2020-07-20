@@ -1,6 +1,6 @@
 //anotações deste trecho importadas pra limpar o código
 
-new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia'); 
+//new NegociacoesView($('#negociacoesView')), 'adiciona', 'esvazia'); 
 // ['adiciona', 'esvazia'] fora dos colchetes por causa do REST operator na classe Bind.
 
 
