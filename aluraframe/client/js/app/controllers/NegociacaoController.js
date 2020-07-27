@@ -14,6 +14,10 @@ class NegociacaoController {
 
              this._mensagem = new Bind(new Mensagem(),
              new MensagemView($('#mensagemView')), 'texto'); // ['texto'] - REST
+
+        setInterval(() => {
+            this.importaNegociacoes();
+        }, 3000)
     }
     
     adiciona(event) {
@@ -34,6 +38,11 @@ class NegociacaoController {
 
         service
         .obterNegociacoes()
+        .then(negociacoes => 
+            negociacoes.filter(negociacao =>
+                !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
+                    JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)))
+        )
         .then(negociacoes => {
 
             negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
