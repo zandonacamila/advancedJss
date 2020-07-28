@@ -14,6 +14,12 @@ class NegociacaoController {
 
              this._mensagem = new Bind(new Mensagem(),
              new MensagemView($('#mensagemView')), 'texto'); // ['texto'] - REST
+        
+        this._init();
+        
+    }
+
+    _init() {
 
         setInterval(() => {
             this.importaNegociacoes();
