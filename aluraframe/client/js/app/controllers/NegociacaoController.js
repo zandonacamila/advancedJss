@@ -16,6 +16,8 @@ class NegociacaoController {
              new MensagemView($('#mensagemView')), 'texto'); // ['texto'] - REST
              
         this._ordemAtual = '';
+
+        this._service = new NegociacaoService();
         
         this._init();
         
@@ -47,7 +49,7 @@ class NegociacaoController {
 
         let negociacao = this._criaNegociacao();
 
-        new NegociacaoService()
+        this._service
             .cadastra(negociacao)
             .then(mensagem => {
                 this._listaNegociacoes.adiciona(negociacao)
@@ -60,16 +62,9 @@ class NegociacaoController {
 
     importaNegociacoes() {
      
-        let service = new NegociacaoService();
-
-        service
-        .obterNegociacoes()
-        .then(negociacoes => 
-            negociacoes.filter(negociacao =>
-                !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
-                    JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente)))
-        )
-        .then(negociacoes => {
+        this._service
+            .importa(this._listaNegociacoes.negociacoes)
+            .then(negociacoes => {
 
             negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
             this._mensagem.texto = 'Negociacoes importadas com sucesso :)';
@@ -88,15 +83,14 @@ class NegociacaoController {
 
     apaga() {
 
-        ConnectionFactory
-            .getConnection()
-            .then(connection => new NegociacaoDao(connection))
-            .then(dao => dao.apagaTodos())
+        this._service
+            .apaga()
             .then(mensagem => {
-
                 this._mensagem.texto = mensagem;
                 this._listaNegociacoes.esvazia();
-            });        
+            })
+            .catch(erro => this._mensagem.texto = erro);
+        
     }
     
     _limpaFormulario() {
