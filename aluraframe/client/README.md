@@ -1,0 +1,1 @@
+Este projeto difere do projeto final do curso por não conter as partes que tratam transpiler e módulos do ES2015, por limitações técnicas mesmo.
